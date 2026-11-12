@@ -54,8 +54,14 @@ class DatabaseConnection:
         DB_PATH.parent.mkdir(parents=True, exist_ok=True)
         conn = sqlite3.connect(str(DB_PATH), timeout=30.0)
         conn.row_factory = sqlite3.Row
-        # Enable WAL mode for high concurrency
-        conn.execute("PRAGMA journal_mode=WAL;")
+        # Enable WAL mode where supported, fallback to DELETE in serverless environments
+        try:
+            conn.execute("PRAGMA journal_mode=WAL;")
+        except Exception:
+            try:
+                conn.execute("PRAGMA journal_mode=DELETE;")
+            except Exception:
+                pass
         return conn
 
     @classmethod
