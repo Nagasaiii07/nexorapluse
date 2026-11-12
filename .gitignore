@@ -16,6 +16,8 @@ __pycache__/
 .coverage
 htmlcov/
 *.db
+*.db-shm
+*.db-wal
 *.sqlite3
 
 # Next.js & Frontend Build
