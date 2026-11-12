@@ -1,0 +1,29 @@
+[
+  {
+    "order_number": "NX9201",
+    "customer_name": "Rohan Deshmukh",
+    "platform": "Amazon",
+    "order_status": "Delivered",
+    "total_amount": 3499.0,
+    "state": "Maharashtra",
+    "city": "Pune"
+  },
+  {
+    "order_number": "NX9202",
+    "customer_name": "Kavya Menon",
+    "platform": "Flipkart",
+    "order_status": "Shipped",
+    "total_amount": 2199.0,
+    "state": "Kerala",
+    "city": "Thiruvananthapuram"
+  },
+  {
+    "order_number": "NX9203",
+    "customer_name": "Aditya Roy",
+    "platform": "Amazon",
+    "order_status": "Processing",
+    "total_amount": 4500.0,
+    "state": "West Bengal",
+    "city": "Siliguri"
+  }
+]

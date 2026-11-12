@@ -1,0 +1,30 @@
+{
+  "name": "nexus-logistics",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NEXUS Logistics Intelligence — Event-Driven Supply Chain & E-Commerce Analytics Platform",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "uvicorn backend.main:app --reload --port 8000",
+    "dev": "npm run dev:frontend",
+    "build:frontend": "cd frontend && npm run build",
+    "build": "npm run build:frontend",
+    "test:backend": "pytest backend/tests",
+    "start": "cd frontend && npm run start"
+  },
+  "workspaces": [
+    "frontend"
+  ],
+  "keywords": [
+    "logistics",
+    "supply-chain",
+    "analytics",
+    "dashboard",
+    "event-driven",
+    "fastapi",
+    "nextjs",
+    "vercel"
+  ],
+  "author": "Google DeepMind Engineer",
+  "license": "MIT"
+}

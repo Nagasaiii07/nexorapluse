@@ -1,0 +1,11 @@
+order_number,customer_name,platform,order_status,total_amount,state,city
+NX9101,Aarav Patel,Amazon,Delivered,2499,Maharashtra,Mumbai
+NX9102,Ishaan Sharma,Flipkart,Shipped,1899,Karnataka,Bengaluru
+NX9103,Diya Verma,Amazon,Processing,3250,Tamil Nadu,Chennai
+NX9104,Kabir Sen,Flipkart,Delivered,1450,Gujarat,Ahmedabad
+NX9105,Ananya Nair,Amazon,Delivered,2890,Uttar Pradesh,Lucknow
+NX9106,Reyansh Rao,Amazon,Returned,1999,Delhi,New Delhi
+NX9107,Saanvi Iyer,Flipkart,Cancelled,1150,Telangana,Hyderabad
+NX9108,Vivaan Joshi,Amazon,Delivered,4200,West Bengal,Kolkata
+NX9109,Meera Gupta,Flipkart,Shipped,1650,Rajasthan,Jaipur
+NX9110,Advait Singh,Amazon,Delivered,2100,Kerala,Kochi

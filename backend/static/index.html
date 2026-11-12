@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS — Logistics Intelligence Platform</title>
+  <!-- Tailwind CSS CDN for instant, pristine enterprise rendering -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            nexus: {
+              navy: '#0d1527',
+              navyBorder: '#1e293b',
+              blue: '#2563eb',
+              blueHover: '#1d4ed8',
+              surface: '#ffffff',
+              bg: '#f8fafc',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="flex min-h-screen bg-[#f8fafc] text-slate-900 antialiased overflow-x-hidden">
+
+  <!-- ========================================== -->
+  <!-- LEFT SIDEBAR (Dark Navy #0d1527)           -->
+  <!-- ========================================== -->
+  <aside class="w-64 bg-[#0d1527] border-r border-[#1e293b] flex flex-col justify-between shrink-0 min-h-screen text-slate-300 select-none z-40">
+    <div>
+      <!-- Brand Logo Header -->
+      <div class="p-5 flex items-center gap-3 border-b border-[#1e293b]/60">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 via-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 text-white font-black text-xl tracking-wider">
+          N
+        </div>
+        <div class="flex flex-col">
+          <span class="font-extrabold text-white text-lg tracking-widest leading-none">NEXUS</span>
+          <span class="text-[11px] font-medium text-slate-400 tracking-wider mt-0.5">Logistics Intelligence</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-3 space-y-1 mt-2" id="nav-container">
+        <button onclick="switchTab('overview')" id="nav-overview" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all bg-[#2563eb] text-white shadow-md shadow-blue-600/30">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span>Overview</span>
+        </button>
+
+        <button onclick="switchTab('orders')" id="nav-orders" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+          <span>Orders</span>
+        </button>
+
+        <button onclick="switchTab('shipments')" id="nav-shipments" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
+          <span>Shipments</span>
+        </button>
+
+        <button onclick="switchTab('revenue')" id="nav-revenue" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          <span>Revenue & Profit</span>
+        </button>
+
+        <button onclick="switchTab('geography')" id="nav-geography" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Geographic Analytics</span>
+        </button>
+
+        <button onclick="switchTab('platforms')" id="nav-platforms" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          <span>Platform Analytics</span>
+        </button>
+
+        <button onclick="switchTab('events')" id="nav-events" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>Live Events</span>
+        </button>
+
+        <button onclick="switchTab('data')" id="nav-data" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+          <span>Data Management</span>
+        </button>
+
+        <button onclick="switchTab('reports')" id="nav-reports" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>Reports & Exports</span>
+        </button>
+
+        <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span>Settings</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Bottom Status & User Profile -->
+    <div className="p-4 border-t border-[#1e293b]/60 space-y-4">
+      <div class="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-slate-900/60 border border-slate-800">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+        </span>
+        <div class="flex flex-col">
+          <span class="text-xs font-semibold text-slate-200">Connected</span>
+          <span class="text-[10px] text-slate-500">Last updated Today, 04:32 PM</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-white/5 cursor-pointer transition-colors">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-indigo-600 text-white font-semibold text-xs flex items-center justify-center ring-2 ring-indigo-400/30">
+            RD
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-semibold text-white">Raghav Dev</span>
+            <span class="text-[11px] text-slate-400">Admin</span>
+          </div>
+        </div>
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================== -->
+  <!-- MAIN WORKSPACE                             -->
+  <!-- ========================================== -->
+  <div class="flex-1 flex flex-col min-w-0 min-h-screen">
+    <!-- Header Bar -->
+    <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between sticky top-0 z-30 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+      <!-- Search Input -->
+      <div class="relative w-80 md:w-96">
+        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input
+          type="text"
+          id="global-search"
+          oninput="handleSearch(this.value)"
+          placeholder="Search orders, shipments, or tracking IDs..."
+          class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+        />
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-3">
+        <!-- Date Filter -->
+        <select id="date-select" onchange="handleFilterChange()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+          <option value="Last 30 Days">Last 30 Days</option>
+          <option value="Last 7 Days">Last 7 Days</option>
+          <option value="Last 90 Days">Last 90 Days</option>
+        </select>
+
+        <!-- Platform Filter -->
+        <select id="platform-select" onchange="handleFilterChange()" class="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+          <option value="All Platforms">All Platforms</option>
+          <option value="Amazon">Amazon</option>
+          <option value="Flipkart">Flipkart</option>
+        </select>
+
+        <!-- Refresh Button -->
+        <button onclick="refreshDashboard()" id="refresh-btn" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-sm">
+          <svg id="refresh-icon" class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span>Refresh</span>
+        </button>
+
+        <!-- Notifications -->
+        <button class="relative p-2 rounded-lg hover:bg-slate-100 text-slate-500 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <span class="absolute top-1.5 right-1.5 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white">3</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT CONTAINERS -->
+    <main class="p-6 space-y-5 max-w-[1600px] w-full mx-auto" id="main-content">
+      <!-- Injected Dynamically Based on Active Tab -->
+    </main>
+  </div>
+
+  <!-- APPLICATION SCRIPTS -->
+  <script>
+    let currentTab = 'overview';
+    let currentPlatform = 'All Platforms';
+    let currentDateRange = 'Last 30 Days';
+    let currentSearch = '';
+    let currentState = '';
+    let overviewCache = null;
+
+    async function init() {
+      await loadOverview();
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      // Update nav styling
+      const navItems = ['overview', 'orders', 'shipments', 'revenue', 'geography', 'platforms', 'events', 'data', 'reports', 'settings'];
+      navItems.forEach(t => {
+        const btn = document.getElementById('nav-' + t);
+        if (!btn) return;
+        if (t === tab) {
+          btn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all bg-[#2563eb] text-white shadow-md shadow-blue-600/30";
+          btn.querySelector('svg').className = "w-4 h-4 text-white";
+        } else {
+          btn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white hover:bg-white/5";
+          btn.querySelector('svg').className = "w-4 h-4 text-slate-400";
+        }
+      });
+
+      if (tab === 'overview') renderOverview();
+      else if (tab === 'orders') renderOrders();
+      else if (tab === 'shipments') renderShipments();
+      else if (tab === 'revenue') renderRevenue();
+      else if (tab === 'geography') renderGeography();
+      else if (tab === 'platforms') renderPlatforms();
+      else if (tab === 'events') renderEvents();
+      else if (tab === 'data') renderData();
+      else if (tab === 'reports') renderReports();
+      else if (tab === 'settings') renderSettings();
+    }
+
+    async function loadOverview() {
+      const q = new URLSearchParams({
+        platform: currentPlatform,
+        date_range: currentDateRange,
+        search: currentSearch,
+        state: currentState
+      });
+      try {
+        const res = await fetch('/api/overview?' + q.toString());
+        overviewCache = await res.json();
+        if (currentTab === 'overview') renderOverview();
+      } catch (err) {
+        console.error("Overview fetch error:", err);
+      }
+    }
+
+    function handleFilterChange() {
+      currentPlatform = document.getElementById('platform-select').value;
+      currentDateRange = document.getElementById('date-select').value;
+      loadOverview();
+      if (currentTab === 'orders') renderOrders();
+      if (currentTab === 'shipments') renderShipments();
+    }
+
+    function handleSearch(val) {
+      currentSearch = val;
+      loadOverview();
+    }
+
+    async function refreshDashboard() {
+      const icon = document.getElementById('refresh-icon');
+      icon.classList.add('animate-spin');
+      await loadOverview();
+      setTimeout(() => icon.classList.remove('animate-spin'), 600);
+    }
+
+    function buildSparkline(pts, stroke) {
+      if (!pts || pts.length < 2) return '';
+      const min = Math.min(...pts);
+      const max = Math.max(...pts);
+      const range = max - min || 1;
+      const w = 80;
+      const h = 28;
+      const pathD = pts.map((val, i) => {
+        const x = (i / (pts.length - 1)) * w;
+        const y = h - ((val - min) / range) * (h - 6) - 3;
+        return `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+      }).join(' ');
+
+      return `
+        <svg viewBox="0 0 ${w} ${h}" class="w-20 h-7 overflow-visible">
+          <path d="${pathD}" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `;
+    }
+
+    function renderKpiCard(m) {
+      const colorMap = {
+        blue: { bg: 'bg-blue-50', text: 'text-blue-600', stroke: '#2563eb' },
+        green: { bg: 'bg-emerald-50', text: 'text-emerald-600', stroke: '#16a34a' },
+        orange: { bg: 'bg-amber-50', text: 'text-amber-600', stroke: '#ea580c' },
+        red: { bg: 'bg-rose-50', text: 'text-rose-600', stroke: '#dc2626' },
+        navy: { bg: 'bg-slate-100', text: 'text-slate-600', stroke: '#475569' },
+        cyan: { bg: 'bg-cyan-50', text: 'text-cyan-600', stroke: '#0891b2' },
+        purple: { bg: 'bg-violet-50', text: 'text-violet-600', stroke: '#7c3aed' }
+      };
+      const c = colorMap[m.color] || colorMap.blue;
+      const isUp = m.trend === 'up';
+
+      return `
+        <div class="bg-white rounded-xl border border-slate-200/80 p-4 flex flex-col justify-between shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg ${c.bg} ${c.text} flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            </div>
+            <span class="text-xs font-medium text-slate-500 leading-tight">${m.title}</span>
+          </div>
+
+          <div class="my-2.5">
+            <span class="text-2xl font-bold text-slate-900 tracking-tight">${m.value}</span>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <div class="flex items-center gap-1 text-xs font-semibold ${isUp ? 'text-emerald-600' : 'text-rose-600'}">
+              <span>${m.change}</span>
+            </div>
+            <div>
+              ${buildSparkline(m.sparkline, c.stroke)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 1. EXECUTIVE OVERVIEW (Reference Image Spec)
+    // ==========================================
+    function renderOverview() {
+      if (!overviewCache) return;
+      const d = overviewCache;
+      const k = d.kpis;
+
+      const container = document.getElementById('main-content');
+      container.innerHTML = `
+        <!-- Title & Live Badge -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Executive Overview</h1>
+            <p class="text-xs text-slate-500 mt-0.5">Real-time business performance and logistics intelligence</p>
+          </div>
+
+          <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-xs font-semibold shadow-sm">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <svg class="w-3.5 h-3.5 text-emerald-600 fill-emerald-600" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Live • Data Updated: ${d.data_updated}</span>
+          </div>
+        </div>
+
+        <!-- Row 1: 5 KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          ${renderKpiCard(k.total_purchases)}
+          ${renderKpiCard(k.total_orders)}
+          ${renderKpiCard(k.accepted_orders)}
+          ${renderKpiCard(k.processing_orders)}
+          ${renderKpiCard(k.shipped_orders)}
+        </div>
+
+        <!-- Row 2: 5 KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          ${renderKpiCard(k.delivered_orders)}
+          ${renderKpiCard(k.cancelled_orders)}
+          ${renderKpiCard(k.returned_orders)}
+          ${renderKpiCard(k.total_revenue)}
+          ${renderKpiCard(k.total_profit)}
+        </div>
+
+        <!-- Row 3: 2 Left Cards + Wide Revenue & Profit Trend Chart -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div class="lg:col-span-4 flex flex-col gap-4">
+            ${renderKpiCard(k.delivery_success_rate)}
+            ${renderKpiCard(k.average_order_value)}
+          </div>
+
+          <div class="lg:col-span-8 bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                </div>
+                <h3 class="font-semibold text-slate-900 text-sm">Revenue & Profit Trend</h3>
+              </div>
+
+              <div class="hidden sm:flex items-center gap-4 text-xs font-medium text-slate-600">
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span><span>Revenue</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span><span>Profit</span></div>
+              </div>
+
+              <div class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/60">
+                <button class="px-3 py-1 rounded-md text-xs font-medium bg-blue-600 text-white shadow-sm">Daily</button>
+                <button class="px-3 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900">Weekly</button>
+                <button class="px-3 py-1 rounded-md text-xs font-medium text-slate-600 hover:text-slate-900">Monthly</button>
+              </div>
+            </div>
+
+            <!-- Dual Spline Area SVG -->
+            <div class="relative w-full mt-3 flex-1 min-h-[175px]">
+              <svg viewBox="0 0 600 180" class="w-full h-full overflow-visible" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="revG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2563eb" stop-opacity="0.25"/><stop offset="100%" stop-color="#2563eb" stop-opacity="0"/></linearGradient>
+                  <linearGradient id="profG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/><stop offset="100%" stop-color="#10b981" stop-opacity="0"/></linearGradient>
+                </defs>
+                <line x1="40" y1="20" x2="540" y2="20" stroke="#f1f5f9" stroke-width="1"/><text x="32" y="24" fill="#94a3b8" font-size="10" text-anchor="end">20L</text>
+                <line x1="40" y1="52" x2="540" y2="52" stroke="#f1f5f9" stroke-width="1"/><text x="32" y="56" fill="#94a3b8" font-size="10" text-anchor="end">15L</text>
+                <line x1="40" y1="85" x2="540" y2="85" stroke="#f1f5f9" stroke-width="1"/><text x="32" y="89" fill="#94a3b8" font-size="10" text-anchor="end">10L</text>
+                <line x1="40" y1="117" x2="540" y2="117" stroke="#f1f5f9" stroke-width="1"/><text x="32" y="121" fill="#94a3b8" font-size="10" text-anchor="end">5L</text>
+                <line x1="40" y1="150" x2="540" y2="150" stroke="#f1f5f9" stroke-width="1"/><text x="32" y="154" fill="#94a3b8" font-size="10" text-anchor="end">0L</text>
+
+                <!-- Revenue Curve -->
+                <path d="M 40 77 C 90 77, 90 86, 140 86 C 190 86, 190 61, 240 61 C 290 61, 290 69, 340 69 C 390 69, 390 57, 440 57 C 490 57, 490 53, 540 53 L 540 150 L 40 150 Z" fill="url(#revG)"/>
+                <path d="M 40 77 C 90 77, 90 86, 140 86 C 190 86, 190 61, 240 61 C 290 61, 290 69, 340 69 C 390 69, 390 57, 440 57 C 490 57, 490 53, 540 53" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+
+                <!-- Profit Curve -->
+                <path d="M 40 134 C 90 134, 90 136, 140 136 C 190 136, 190 131, 240 131 C 290 131, 290 132, 340 132 C 390 132, 390 130, 440 130 L 540 129 L 540 150 L 40 150 Z" fill="url(#profG)"/>
+                <path d="M 40 134 C 90 134, 90 136, 140 136 C 190 136, 190 131, 240 131 C 290 131, 290 132, 340 132 C 390 132, 390 130, 440 130 L 540 129" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+
+                <!-- X Axis Dates -->
+                <text x="40" y="168" fill="#94a3b8" font-size="10" text-anchor="middle">Apr 23</text>
+                <text x="140" y="168" fill="#94a3b8" font-size="10" text-anchor="middle">Apr 26</text>
+                <text x="240" y="168" fill="#94a3b8" font-size="10" text-anchor="middle">Apr 29</text>
+                <text x="340" y="168" fill="#94a3b8" font-size="10" text-anchor="middle">May 02</text>
+                <text x="440" y="168" fill="#94a3b8" font-size="10" text-anchor="middle">May 05</text>
+                <text x="540" y="168" fill="#94a3b8" font-size="10" text-anchor="middle">May 08</text>
+
+                <!-- Value Pins -->
+                <g transform="translate(548, 43)"><rect width="46" height="20" rx="4" fill="#2563eb"/><text x="23" y="14" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">₹14.8L</text></g>
+                <g transform="translate(548, 119)"><rect width="44" height="20" rx="4" fill="#10b981"/><text x="22" y="14" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">₹3.2L</text></g>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Donut Chart, Top States Map, Recent Orders -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <!-- Donut Card -->
+          <div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between">
+            <h3 class="font-semibold text-slate-900 text-sm pb-2 border-b border-slate-100">Order Status Overview</h3>
+            <div class="flex items-center justify-between gap-4 py-2 mt-1">
+              <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 170 170">
+                  <circle cx="85" cy="85" r="66" fill="transparent" stroke="#f1f5f9" stroke-width="18"/>
+                  <circle cx="85" cy="85" r="66" fill="transparent" stroke="#16a34a" stroke-width="18" stroke-dasharray="375 414" stroke-dashoffset="0"/>
+                  <circle cx="85" cy="85" r="66" fill="transparent" stroke="#2563eb" stroke-width="18" stroke-dasharray="8 414" stroke-dashoffset="-375"/>
+                  <circle cx="85" cy="85" r="66" fill="transparent" stroke="#ea580c" stroke-width="18" stroke-dasharray="6 414" stroke-dashoffset="-383"/>
+                  <circle cx="85" cy="85" r="66" fill="transparent" stroke="#dc2626" stroke-width="18" stroke-dasharray="16 414" stroke-dashoffset="-389"/>
+                  <circle cx="85" cy="85" r="66" fill="transparent" stroke="#8b5cf6" stroke-width="18" stroke-dasharray="12 414" stroke-dashoffset="-405"/>
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span class="text-xl font-bold text-slate-900 leading-none">8,426</span>
+                  <span class="text-[10px] font-medium text-slate-400 mt-0.5">Total Orders</span>
+                </div>
+              </div>
+
+              <div class="flex-1 space-y-2 text-xs">
+                <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span><span class="font-medium text-slate-700">Delivered</span></div><div class="font-semibold"><span class="text-slate-800">7,621</span> <span class="text-slate-400 font-normal ml-1">90.4%</span></div></div>
+                <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span><span class="font-medium text-slate-700">Shipped</span></div><div class="font-semibold"><span class="text-slate-800">171</span> <span class="text-slate-400 font-normal ml-1">2.0%</span></div></div>
+                <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span><span class="font-medium text-slate-700">Processing</span></div><div class="font-semibold"><span class="text-slate-800">124</span> <span class="text-slate-400 font-normal ml-1">1.5%</span></div></div>
+                <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span><span class="font-medium text-slate-700">Cancelled</span></div><div class="font-semibold"><span class="text-slate-800">327</span> <span class="text-slate-400 font-normal ml-1">3.9%</span></div></div>
+                <div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span><span class="font-medium text-slate-700">Returned</span></div><div class="font-semibold"><span class="text-slate-800">248</span> <span class="text-slate-400 font-normal ml-1">2.9%</span></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top States by Revenue Card -->
+          <div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between">
+            <h3 class="font-semibold text-slate-900 text-sm pb-2 border-b border-slate-100">Top States by Revenue</h3>
+            <div class="grid grid-cols-12 gap-3 items-center mt-2">
+              <div class="col-span-5 flex items-center justify-center">
+                <svg viewBox="0 0 280 300" class="w-full h-40 drop-shadow-sm">
+                  <path d="M 85 140 L 125 135 L 145 160 L 130 195 L 90 185 L 75 160 Z" fill="#1e40af" stroke="#fff" stroke-width="1.2"><title>Maharashtra</title></path>
+                  <path d="M 90 185 L 130 195 L 120 240 L 95 245 L 85 210 Z" fill="#2563eb" stroke="#fff" stroke-width="1.2"><title>Karnataka</title></path>
+                  <path d="M 120 240 L 140 235 L 130 280 L 105 285 L 110 250 Z" fill="#3b82f6" stroke="#fff" stroke-width="1.2"><title>Tamil Nadu</title></path>
+                  <path d="M 45 110 L 85 105 L 85 140 L 55 150 L 35 125 Z" fill="#60a5fa" stroke="#fff" stroke-width="1.2"><title>Gujarat</title></path>
+                  <path d="M 125 65 L 175 60 L 185 95 L 135 105 L 120 85 Z" fill="#93c5fd" stroke="#fff" stroke-width="1.2"><title>Uttar Pradesh</title></path>
+                  <path d="M 65 65 L 120 60 L 115 110 L 65 115 Z" fill="#93c5fd" stroke="#fff" stroke-width="1.2"></path>
+                  <path d="M 90 105 L 155 100 L 150 140 L 90 140 Z" fill="#60a5fa" stroke="#fff" stroke-width="1.2"></path>
+                  <path d="M 85 10 L 125 15 L 115 50 L 75 45 Z" fill="#dbeafe" stroke="#fff" stroke-width="1.2"></path>
+                </svg>
+              </div>
+
+              <div class="col-span-7 space-y-2.5 text-xs">
+                <div><div class="flex justify-between mb-1"><span class="font-medium text-slate-700">Maharashtra</span><div class="flex gap-2"><span class="font-bold text-slate-900">₹2.1L</span><span class="text-slate-400">14.2%</span></div></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-600 h-full rounded-full" style="width: 100%"></div></div></div>
+                <div><div class="flex justify-between mb-1"><span class="font-medium text-slate-700">Karnataka</span><div class="flex gap-2"><span class="font-bold text-slate-900">₹1.8L</span><span class="text-slate-400">12.1%</span></div></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-500 h-full rounded-full" style="width: 85%"></div></div></div>
+                <div><div class="flex justify-between mb-1"><span class="font-medium text-slate-700">Tamil Nadu</span><div class="flex gap-2"><span class="font-bold text-slate-900">₹1.6L</span><span class="text-slate-400">10.8%</span></div></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-500 h-full rounded-full" style="width: 76%"></div></div></div>
+                <div><div class="flex justify-between mb-1"><span class="font-medium text-slate-700">Gujarat</span><div class="flex gap-2"><span class="font-bold text-slate-900">₹1.3L</span><span class="text-slate-400">8.7%</span></div></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-500 h-full rounded-full" style="width: 61%"></div></div></div>
+                <div><div class="flex justify-between mb-1"><span class="font-medium text-slate-700">Uttar Pradesh</span><div class="flex gap-2"><span class="font-bold text-slate-900">₹1.2L</span><span class="text-slate-400">8.1%</span></div></div><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-500 h-full rounded-full" style="width: 57%"></div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Orders Card -->
+          <div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h3 class="font-semibold text-slate-900 text-sm">Recent Orders</h3>
+              <button onclick="switchTab('orders')" class="text-xs font-semibold text-blue-600 hover:underline">View All →</button>
+            </div>
+
+            <div class="overflow-x-auto mt-2">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="text-slate-400 font-semibold border-b border-slate-100">
+                    <th class="pb-2">Order ID</th>
+                    <th class="pb-2">Date</th>
+                    <th class="pb-2">Customer</th>
+                    <th class="pb-2">Platform</th>
+                    <th class="pb-2">Status</th>
+                    <th class="pb-2 text-right">Value</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-2.5 font-semibold text-slate-900">#NX8426</td>
+                    <td class="py-2.5 text-slate-500 text-[11px] whitespace-nowrap">04 May, 4:21 PM</td>
+                    <td class="py-2.5 font-medium text-slate-800">Priya Sharma</td>
+                    <td class="py-2.5 text-slate-600">Amazon</td>
+                    <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Delivered</span></td>
+                    <td class="py-2.5 font-bold text-slate-900 text-right">₹2,499</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-2.5 font-semibold text-slate-900">#NX8425</td>
+                    <td class="py-2.5 text-slate-500 text-[11px] whitespace-nowrap">04 May, 4:18 PM</td>
+                    <td class="py-2.5 font-medium text-slate-800">Rahul Mehta</td>
+                    <td class="py-2.5 text-slate-600">Flipkart</td>
+                    <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">Shipped</span></td>
+                    <td class="py-2.5 font-bold text-slate-900 text-right">₹1,799</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-2.5 font-semibold text-slate-900">#NX8424</td>
+                    <td class="py-2.5 text-slate-500 text-[11px] whitespace-nowrap">04 May, 4:15 PM</td>
+                    <td class="py-2.5 font-medium text-slate-800">Sneha Reddy</td>
+                    <td class="py-2.5 text-slate-600">Amazon</td>
+                    <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">Processing</span></td>
+                    <td class="py-2.5 font-bold text-slate-900 text-right">₹3,299</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-2.5 font-semibold text-slate-900">#NX8423</td>
+                    <td class="py-2.5 text-slate-500 text-[11px] whitespace-nowrap">04 May, 4:12 PM</td>
+                    <td class="py-2.5 font-medium text-slate-800">Arjun Kumar</td>
+                    <td class="py-2.5 text-slate-600">Flipkart</td>
+                    <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Delivered</span></td>
+                    <td class="py-2.5 font-bold text-slate-900 text-right">₹1,199</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="py-2.5 font-semibold text-slate-900">#NX8422</td>
+                    <td class="py-2.5 text-slate-500 text-[11px] whitespace-nowrap">04 May, 4:10 PM</td>
+                    <td class="py-2.5 font-medium text-slate-800">Divya Patel</td>
+                    <td class="py-2.5 text-slate-600">Amazon</td>
+                    <td class="py-2.5"><span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200">Returned</span></td>
+                    <td class="py-2.5 font-bold text-slate-900 text-right">₹2,299</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 2. ORDERS MANAGEMENT
+    // ==========================================
+    async function renderOrders() {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `<div class="p-8 text-center text-slate-400">Loading orders...</div>`;
+      try {
+        const res = await fetch(`/api/orders?platform=${encodeURIComponent(currentPlatform === 'All Platforms' ? '' : currentPlatform)}&search=${encodeURIComponent(currentSearch)}&limit=25`);
+        const data = await res.json();
+        const orders = data.orders || [];
+
+        container.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Orders Management</h1>
+              <p class="text-xs text-slate-500 mt-0.5">Fulfillment lifecycle, customer orders & multi-channel marketplace transactions</p>
+            </div>
+            <div class="px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 shadow-sm">
+              Total Records: <span class="text-blue-600 font-bold">${data.total.toLocaleString()}</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-4 font-semibold">Order ID</th>
+                    <th class="py-3 px-4 font-semibold">Date & Time</th>
+                    <th class="py-3 px-4 font-semibold">Customer</th>
+                    <th class="py-3 px-4 font-semibold">Platform</th>
+                    <th class="py-3 px-4 font-semibold">Location</th>
+                    <th class="py-3 px-4 font-semibold">Courier</th>
+                    <th class="py-3 px-4 font-semibold">Status</th>
+                    <th class="py-3 px-4 font-semibold text-right">Value</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  ${orders.map(o => `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                      <td class="py-3 px-4 font-semibold text-slate-900">${o.order_number}</td>
+                      <td class="py-3 px-4 text-slate-500 text-[11px] whitespace-nowrap">${o.date}</td>
+                      <td class="py-3 px-4 font-medium text-slate-800">${o.customer}</td>
+                      <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[11px] font-semibold ${o.platform === 'Amazon' ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-blue-50 text-blue-800 border border-blue-200'}">${o.platform}</span></td>
+                      <td class="py-3 px-4 text-slate-600">${o.city}, ${o.state}</td>
+                      <td class="py-3 px-4 text-slate-600 text-[11px]">${o.courier || 'Delhivery'}</td>
+                      <td class="py-3 px-4">
+                        <select onchange="updateOrderStatusLive('${o.id}', this.value)" class="text-[11px] font-semibold py-0.5 px-2 rounded border border-slate-200 bg-white text-slate-800">
+                          ${['Delivered', 'Shipped', 'Processing', 'Cancelled', 'Returned'].map(s => `<option value="${s}" ${o.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+                        </select>
+                      </td>
+                      <td class="py-3 px-4 font-bold text-slate-900 text-right">${o.value}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `<div class="p-8 text-center text-rose-500">Failed to load orders: ${err.message}</div>`;
+      }
+    }
+
+    async function updateOrderStatusLive(orderId, newStatus) {
+      try {
+        await fetch(`/api/orders/${encodeURIComponent(orderId)}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        await loadOverview();
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+
+    // ==========================================
+    // 3. SHIPMENTS
+    // ==========================================
+    async function renderShipments() {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `<div class="p-8 text-center text-slate-400">Loading shipments...</div>`;
+      try {
+        const res = await fetch('/api/shipments?limit=25');
+        const data = await res.json();
+        const shipments = data.shipments || [];
+
+        container.innerHTML = `
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Shipment Tracking</h1>
+            <p class="text-xs text-slate-500 mt-0.5">Real-time courier fleet observability, transit milestones and delivery SLA monitoring</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white rounded-xl border border-slate-200/80 p-4 shadow-sm">
+              <span class="text-xs font-medium text-slate-500 block">On-Time Delivery Rate</span>
+              <span class="text-2xl font-bold text-slate-900 mt-1 block">94.6%</span>
+              <span class="text-xs font-semibold text-emerald-600 mt-0.5 block">↑ 1.4% vs SLA</span>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200/80 p-4 shadow-sm">
+              <span class="text-xs font-medium text-slate-500 block">Active In-Transit Packages</span>
+              <span class="text-2xl font-bold text-slate-900 mt-1 block">171</span>
+              <span class="text-xs font-semibold text-blue-600 mt-0.5 block">5 Partner Hubs</span>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200/80 p-4 shadow-sm">
+              <span class="text-xs font-medium text-slate-500 block">Average Transit Time</span>
+              <span class="text-2xl font-bold text-slate-900 mt-1 block">2.2 Days</span>
+              <span class="text-xs font-semibold text-emerald-600 mt-0.5 block">↓ 0.3 Days Faster</span>
+            </div>
+            <div class="bg-white rounded-xl border border-slate-200/80 p-4 shadow-sm">
+              <span class="text-xs font-medium text-slate-500 block">RTO Return Rate</span>
+              <span class="text-2xl font-bold text-slate-900 mt-1 block">2.9%</span>
+              <span class="text-xs font-semibold text-emerald-600 mt-0.5 block">↓ 0.4% Improvement</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden">
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+              <h3 class="font-semibold text-slate-900 text-sm">Active Logistics Pipeline</h3>
+              <span class="text-xs text-slate-500">Live Telemetry Stream</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-4 font-semibold">Tracking #</th>
+                    <th class="py-3 px-4 font-semibold">Order</th>
+                    <th class="py-3 px-4 font-semibold">Courier</th>
+                    <th class="py-3 px-4 font-semibold">Origin Hub</th>
+                    <th class="py-3 px-4 font-semibold">Destination</th>
+                    <th class="py-3 px-4 font-semibold">Status</th>
+                    <th class="py-3 px-4 font-semibold text-right">Quick Transition</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  ${shipments.map(s => `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                      <td class="py-3 px-4 font-mono font-bold text-blue-600">${s.tracking_number}</td>
+                      <td class="py-3 px-4 font-semibold text-slate-900">#${s.order_number}</td>
+                      <td class="py-3 px-4 font-medium text-slate-700">${s.courier}</td>
+                      <td class="py-3 px-4 text-slate-500">${s.origin_hub || 'BOM-Hub'}</td>
+                      <td class="py-3 px-4 text-slate-700 font-medium">${s.state}</td>
+                      <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded text-[11px] font-semibold ${s.shipment_status === 'Delivered' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-blue-50 text-blue-700 border border-blue-200'}">${s.shipment_status}</span></td>
+                      <td class="py-3 px-4 text-right">
+                        ${s.shipment_status !== 'Delivered' ? `<button onclick="updateShipmentStatusLive('${s.tracking_number}', 'Delivered')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[11px] font-semibold transition-colors">Mark Delivered</button>` : `<span class="text-slate-400 italic text-[11px]">Completed</span>`}
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `<div class="p-8 text-center text-rose-500">Failed to load shipments: ${err.message}</div>`;
+      }
+    }
+
+    async function updateShipmentStatusLive(trackingNum, status) {
+      await fetch(`/api/shipments/${encodeURIComponent(trackingNum)}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      await renderShipments();
+      await loadOverview();
+    }
+
+    // ==========================================
+    // 4. REVENUE & PROFIT
+    // ==========================================
+    function renderRevenue() {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Revenue & Profit Analytics</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Financial unit economics, marketplace commission fees, and shipping margin profitability</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-white rounded-xl border border-slate-200/80 p-4 shadow-sm">
+            <span class="text-xs font-medium text-slate-500 block">Total Revenue (GMV)</span>
+            <span class="text-2xl font-bold text-slate-900 mt-1 block">₹14.8L</span>
+            <span class="text-xs font-semibold text-emerald-600 mt-0.5 block">↑ 16.7% vs last month</span>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200/80 p-4 shadow-sm">
+            <span class="text-xs font-medium text-slate-500 block">Net Realized Profit</span>
+            <span class="text-2xl font-bold text-slate-900 mt-1 block">₹3.2L</span>
+            <span class="text-xs font-semibold text-emerald-600 mt-0.5 block">↑ 18.9% vs last month</span>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200/80 p-4 shadow-sm">
+            <span class="text-xs font-medium text-slate-500 block">Blended Profit Margin</span>
+            <span class="text-2xl font-bold text-slate-900 mt-1 block">21.6%</span>
+            <span class="text-xs font-semibold text-emerald-600 mt-0.5 block">↑ 1.2% expansion</span>
+          </div>
+          <div class="bg-white rounded-xl border border-slate-200/80 p-4 shadow-sm">
+            <span class="text-xs font-medium text-slate-500 block">Fulfillment Cost / Unit</span>
+            <span class="text-2xl font-bold text-slate-900 mt-1 block">₹142</span>
+            <span class="text-xs font-semibold text-emerald-600 mt-0.5 block">↓ ₹8 vs budget</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm space-y-3">
+            <h3 class="font-semibold text-slate-900 text-sm">Marketplace Cost Structure</h3>
+            <div class="space-y-3 text-xs">
+              <div><div class="flex justify-between font-medium mb-1"><span class="text-slate-600">Cost of Goods Sold (COGS)</span><span class="font-bold text-slate-900">54.2% (₹8.02L)</span></div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="bg-blue-600 h-full" style="width: 54.2%"></div></div></div>
+              <div><div class="flex justify-between font-medium mb-1"><span class="text-slate-600">Net Realized Profit</span><span class="font-bold text-slate-900">21.6% (₹3.20L)</span></div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="bg-emerald-500 h-full" style="width: 21.6%"></div></div></div>
+              <div><div class="flex justify-between font-medium mb-1"><span class="text-slate-600">Platform Referral Fees</span><span class="font-bold text-slate-900">14.8% (₹2.19L)</span></div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="bg-amber-500 h-full" style="width: 14.8%"></div></div></div>
+              <div><div class="flex justify-between font-medium mb-1"><span class="text-slate-600">Last-Mile Logistics</span><span class="font-bold text-slate-900">9.4% (₹1.39L)</span></div><div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div class="bg-purple-500 h-full" style="width: 9.4%"></div></div></div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm space-y-3">
+            <h3 class="font-semibold text-slate-900 text-sm">Marketplace Profit Contribution</h3>
+            <div class="grid grid-cols-2 gap-3 text-xs pt-2">
+              <div class="p-4 rounded-xl bg-amber-50/60 border border-amber-200/80">
+                <span class="font-bold text-amber-900 block text-sm">Amazon India</span>
+                <span class="text-2xl font-black text-amber-950 mt-1 block">₹1.82L</span>
+                <span class="text-[11px] text-amber-700 block mt-1">22.8% Margin • 4,535 Orders</span>
+              </div>
+              <div class="p-4 rounded-xl bg-blue-50/60 border border-blue-200/80">
+                <span class="font-bold text-blue-900 block text-sm">Flipkart</span>
+                <span class="text-2xl font-black text-blue-950 mt-1 block">₹1.38L</span>
+                <span class="text-[11px] text-blue-700 block mt-1">20.2% Margin • 3,891 Orders</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 5. GEOGRAPHIC ANALYTICS
+    // ==========================================
+    function renderGeography() {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Geographic Analytics — India Map</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Territorial demand density, pin-code logistics fulfillment hubs, and state-level delivery speed</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <div class="lg:col-span-6 bg-white rounded-xl border border-slate-200/80 p-6 shadow-sm flex flex-col items-center justify-center">
+            <h3 class="font-semibold text-slate-900 text-sm mb-4 self-start">Interactive Choropleth</h3>
+            <svg viewBox="0 0 280 300" class="w-full h-64 drop-shadow-md">
+              <path d="M 85 140 L 125 135 L 145 160 L 130 195 L 90 185 L 75 160 Z" fill="#1e40af" stroke="#fff" stroke-width="1.2"><title>Maharashtra</title></path>
+              <path d="M 90 185 L 130 195 L 120 240 L 95 245 L 85 210 Z" fill="#2563eb" stroke="#fff" stroke-width="1.2"><title>Karnataka</title></path>
+              <path d="M 120 240 L 140 235 L 130 280 L 105 285 L 110 250 Z" fill="#3b82f6" stroke="#fff" stroke-width="1.2"><title>Tamil Nadu</title></path>
+              <path d="M 45 110 L 85 105 L 85 140 L 55 150 L 35 125 Z" fill="#60a5fa" stroke="#fff" stroke-width="1.2"><title>Gujarat</title></path>
+              <path d="M 125 65 L 175 60 L 185 95 L 135 105 L 120 85 Z" fill="#93c5fd" stroke="#fff" stroke-width="1.2"><title>Uttar Pradesh</title></path>
+              <path d="M 65 65 L 120 60 L 115 110 L 65 115 Z" fill="#93c5fd" stroke="#fff" stroke-width="1.2"></path>
+              <path d="M 90 105 L 155 100 L 150 140 L 90 140 Z" fill="#60a5fa" stroke="#fff" stroke-width="1.2"></path>
+              <path d="M 85 10 L 125 15 L 115 50 L 75 45 Z" fill="#dbeafe" stroke="#fff" stroke-width="1.2"></path>
+            </svg>
+          </div>
+
+          <div class="lg:col-span-6 bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm">
+            <h3 class="font-semibold text-slate-900 text-sm pb-2 border-b border-slate-100">State Demand & Revenue</h3>
+            <div class="space-y-3 mt-3 text-xs">
+              <div class="p-3 bg-slate-50 rounded-lg flex justify-between items-center"><span class="font-bold text-slate-800">1. Maharashtra</span><div class="text-right"><span class="font-bold text-slate-900 block">₹2.1L (14.2%)</span><span class="text-slate-400 text-[10px]">1,196 Orders • Mumbai Central Hub</span></div></div>
+              <div class="p-3 bg-slate-50 rounded-lg flex justify-between items-center"><span class="font-bold text-slate-800">2. Karnataka</span><div class="text-right"><span class="font-bold text-slate-900 block">₹1.8L (12.1%)</span><span class="text-slate-400 text-[10px]">1,019 Orders • Bengaluru Hub</span></div></div>
+              <div class="p-3 bg-slate-50 rounded-lg flex justify-between items-center"><span class="font-bold text-slate-800">3. Tamil Nadu</span><div class="text-right"><span class="font-bold text-slate-900 block">₹1.6L (10.8%)</span><span class="text-slate-400 text-[10px]">910 Orders • Chennai Express</span></div></div>
+              <div class="p-3 bg-slate-50 rounded-lg flex justify-between items-center"><span class="font-bold text-slate-800">4. Gujarat</span><div class="text-right"><span class="font-bold text-slate-900 block">₹1.3L (8.7%)</span><span class="text-slate-400 text-[10px]">733 Orders • Ahmedabad Hub</span></div></div>
+              <div class="p-3 bg-slate-50 rounded-lg flex justify-between items-center"><span class="font-bold text-slate-800">5. Uttar Pradesh</span><div class="text-right"><span class="font-bold text-slate-900 block">₹1.2L (8.1%)</span><span class="text-slate-400 text-[10px]">682 Orders • Lucknow Cargo</span></div></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 6. PLATFORM ANALYTICS
+    // ==========================================
+    function renderPlatforms() {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Amazon vs Flipkart Analytics</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Head-to-head marketplace benchmark: volume, conversion rates, shipping SLAs and profitability</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-white rounded-2xl border border-amber-200/80 p-6 shadow-sm">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-black text-xl shadow-md">A</div>
+                <div><h3 class="font-bold text-slate-900 text-lg">Amazon India</h3><span class="text-xs text-amber-600 font-semibold">Primary GMV Driver</span></div>
+              </div>
+              <span class="text-2xl font-black text-slate-900">₹8.0L</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3 pt-4 text-xs">
+              <div class="p-3 bg-amber-50/50 rounded-lg"><span class="text-slate-500 text-[11px] block">Orders</span><span class="text-base font-bold text-slate-900 mt-0.5 block">4,535</span></div>
+              <div class="p-3 bg-amber-50/50 rounded-lg"><span class="text-slate-500 text-[11px] block">Delivery SLA</span><span class="text-base font-bold text-emerald-600 mt-0.5 block">92.9%</span></div>
+              <div class="p-3 bg-amber-50/50 rounded-lg"><span class="text-slate-500 text-[11px] block">Avg Time</span><span class="text-base font-bold text-slate-900 mt-0.5 block">1.8 Days</span></div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-blue-200/80 p-6 shadow-sm">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xl shadow-md">F</div>
+                <div><h3 class="font-bold text-slate-900 text-lg">Flipkart</h3><span class="text-xs text-blue-600 font-semibold">Fastest Growing Tier-2 Hub</span></div>
+              </div>
+              <span class="text-2xl font-black text-slate-900">₹6.8L</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3 pt-4 text-xs">
+              <div class="p-3 bg-blue-50/50 rounded-lg"><span class="text-slate-500 text-[11px] block">Orders</span><span class="text-base font-bold text-slate-900 mt-0.5 block">3,891</span></div>
+              <div class="p-3 bg-blue-50/50 rounded-lg"><span class="text-slate-500 text-[11px] block">Delivery SLA</span><span class="text-base font-bold text-emerald-600 mt-0.5 block">92.7%</span></div>
+              <div class="p-3 bg-blue-50/50 rounded-lg"><span class="text-slate-500 text-[11px] block">Avg Time</span><span class="text-base font-bold text-slate-900 mt-0.5 block">2.1 Days</span></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 7. LIVE EVENTS
+    // ==========================================
+    async function renderEvents() {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `<div class="p-8 text-center text-slate-400">Loading live event stream...</div>`;
+      try {
+        const res = await fetch('/api/events?limit=50');
+        const data = await res.json();
+        const events = data.events || [];
+
+        container.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Live Event Monitoring</h1>
+              <p class="text-xs text-slate-500 mt-0.5">Publish-subscribe event bus audit trail, timing diagnostics and telemetry observability</p>
+            </div>
+            <div class="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200">
+              Bus Status: ACTIVE (WAL Persistence)
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                  <tr>
+                    <th class="py-3 px-4 font-semibold">Event ID</th>
+                    <th class="py-3 px-4 font-semibold">Name</th>
+                    <th class="py-3 px-4 font-semibold">Type</th>
+                    <th class="py-3 px-4 font-semibold">Source</th>
+                    <th class="py-3 px-4 font-semibold">Duration</th>
+                    <th class="py-3 px-4 font-semibold">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 font-mono">
+                  ${events.map(e => `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                      <td class="py-3 px-4 font-bold text-blue-600">${e.event_id}</td>
+                      <td class="py-3 px-4 font-sans font-medium text-slate-800">${e.name}</td>
+                      <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px]">${e.event_type}</span></td>
+                      <td class="py-3 px-4 font-sans text-slate-500">${e.source}</td>
+                      <td class="py-3 px-4 text-slate-700">${e.duration_ms} ms</td>
+                      <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[11px] font-semibold ${e.status === 'SUCCESS' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-rose-50 text-rose-700 border border-rose-200'}">${e.status}</span></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `<div class="p-8 text-center text-rose-500">Failed to load events: ${err.message}</div>`;
+      }
+    }
+
+    // ==========================================
+    // 8. DATA MANAGEMENT
+    // ==========================================
+    function renderData() {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Data Management & Ingestion</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Ingest orders datasets, execute data cleaning pipelines, and manage database persistence</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-white rounded-xl border border-slate-200/80 p-6 shadow-sm space-y-4">
+            <h3 class="font-semibold text-slate-900 text-sm">Upload Orders & Telemetry</h3>
+            <div class="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center hover:border-blue-500 transition-colors bg-slate-50/50">
+              <input type="file" id="dataset-file-input" class="text-xs block mx-auto text-slate-600 mb-2"/>
+              <button onclick="handleManualUpload()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-sm">
+                Ingest Selected File
+              </button>
+            </div>
+            <div id="upload-status" class="text-xs"></div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200/80 p-6 shadow-sm space-y-4 flex flex-col justify-between">
+            <div>
+              <h3 class="font-semibold text-slate-900 text-sm">Reference Benchmark Database</h3>
+              <p class="text-xs text-slate-500 mt-1">Reset SQLite / PostgreSQL data store to the exact 8,426 calibrated reference orders shown in the visual specification.</p>
+            </div>
+            <button onclick="handleResetSampleData()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-sm">
+              Restore 8,426 Reference Dataset
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    async function handleManualUpload() {
+      const fileInput = document.getElementById('dataset-file-input');
+      const statusDiv = document.getElementById('upload-status');
+      if (!fileInput.files || fileInput.files.length === 0) {
+        alert('Please choose a CSV or JSON file first.');
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      statusDiv.innerHTML = '<span class="text-blue-600 font-semibold">Ingesting and validating dataset...</span>';
+      try {
+        const res = await fetch('/api/data/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        statusDiv.innerHTML = `<span class="text-emerald-600 font-semibold">✓ Successfully imported ${data.records_imported} records!</span>`;
+        await loadOverview();
+      } catch (err) {
+        statusDiv.innerHTML = `<span class="text-rose-600 font-semibold">Upload failed: ${err.message}</span>`;
+      }
+    }
+
+    async function handleResetSampleData() {
+      if (!confirm('Restore reference 8,426 orders dataset?')) return;
+      await fetch('/api/data/reset-sample', { method: 'POST' });
+      alert('Reference dataset successfully restored.');
+      await loadOverview();
+    }
+
+    // ==========================================
+    // 9. REPORTS & EXPORTS
+    // ==========================================
+    function renderReports() {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Reports & Exports</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Download business intelligence audits, data exports and operational reports</p>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm flex items-center justify-between">
+          <div>
+            <h3 class="font-semibold text-slate-900 text-sm">Export Current Filtered Dataset</h3>
+            <span class="text-slate-400 text-xs">Format: CSV or JSON</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="window.open('/api/reports/export?format=csv', '_blank')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold">Export CSV</button>
+            <button onclick="window.open('/api/reports/export?format=json', '_blank')" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold">Export JSON</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==========================================
+    // 10. SETTINGS
+    // ==========================================
+    function renderSettings() {
+      const container = document.getElementById('main-content');
+      container.innerHTML = `
+        <div>
+          <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Settings & Configuration</h1>
+          <p class="text-xs text-slate-500 mt-0.5">Infrastructure integrations, database parameters, marketplace credentials & alert thresholds</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm space-y-3">
+            <h3 class="font-semibold text-slate-900 text-sm">Database & Storage Engine</h3>
+            <p class="text-xs text-slate-500">PostgreSQL (Neon / Supabase) & Local SQLite connection pool status.</p>
+            <div class="p-3 bg-slate-50 rounded-lg text-xs flex justify-between">
+              <span class="font-medium text-slate-700">Database Driver:</span>
+              <span class="text-emerald-600 font-bold">PostgreSQL Ready / SQLite Active</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm space-y-3">
+            <h3 class="font-semibold text-slate-900 text-sm">Deployment Runtime</h3>
+            <p class="text-xs text-slate-500">Vercel Serverless Functions + GitHub Monorepo configuration.</p>
+            <div class="p-3 bg-slate-50 rounded-lg text-xs flex justify-between">
+              <span class="font-medium text-slate-700">Vercel Entrypoint:</span>
+              <span class="font-mono text-blue-600 font-bold">backend/main.py</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Start App
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
