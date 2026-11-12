@@ -109,3 +109,4 @@ def downgrade() -> None:
     op.drop_table('orders')
     op.drop_table('platforms')
     op.drop_table('users')
+
