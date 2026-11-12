@@ -3,28 +3,22 @@
 
 version = 2
 
-builds = [
-  {
-    "src": "backend/main.py",
-    "use": "@vercel/python",
-    "config": {
-      "maxLambdaSize": "50mb",
-      "runtime": "python3.12"
-    }
-  },
-  {
-    "src": "frontend/package.json",
-    "use": "@vercel/next"
-  }
-]
+[[builds]]
+src = "backend/main.py"
+use = "@vercel/python"
 
-routes = [
-  {
-    "src": "/api/(.*)",
-    "dest": "backend/main.py"
-  },
-  {
-    "src": "/(.*)",
-    "dest": "frontend/$1"
-  }
-]
+[builds.config]
+maxLambdaSize = "50mb"
+runtime = "python3.12"
+
+[[builds]]
+src = "frontend/package.json"
+use = "@vercel/next"
+
+[[routes]]
+src = "/api/(.*)"
+dest = "backend/main.py"
+
+[[routes]]
+src = "/(.*)"
+dest = "frontend/$1"
