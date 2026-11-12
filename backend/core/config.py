@@ -17,9 +17,8 @@ APP_VERSION = "2.4.0"
 API_PREFIX = "/api"
 
 # Database Configuration
-DEFAULT_SQLITE_PATH = Path("/tmp/nexus.db") if os.getenv("VERCEL") else BASE_DIR / "nexus.db"
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DEFAULT_SQLITE_PATH}")
-DB_PATH = Path("/tmp/nexus.db") if (os.getenv("VERCEL") and not os.getenv("DATABASE_URL")) else DEFAULT_SQLITE_PATH
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR}/nexus.db")
+DB_PATH = BASE_DIR / "nexus.db"
 
 # Security & CORS
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
