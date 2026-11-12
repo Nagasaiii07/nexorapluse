@@ -18,7 +18,3 @@ use = "@vercel/next"
 [[routes]]
 src = "/api/(.*)"
 dest = "backend/main.py"
-
-[[routes]]
-src = "/(.*)"
-dest = "frontend/$1"
