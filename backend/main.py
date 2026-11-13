@@ -64,6 +64,7 @@ app.add_middleware(
 api_router = APIRouter(prefix="/api")
 
 @api_router.get("/health", tags=["Health"])
+@app.get("/health", tags=["Health"])
 def health_check():
     """
     Returns application health, API version, and database connection status
