@@ -49,8 +49,11 @@ if HAS_SQLALCHEMY and DATABASE_URL and ("postgresql" in DATABASE_URL or "sqlite"
 class DatabaseConnection:
     """Thread-safe SQLite connection pool & query executor."""
 
+    _is_ready = False
+    _is_initializing = False
+
     @staticmethod
-    def get_raw_connection() -> sqlite3.Connection:
+    def _create_raw_connection() -> sqlite3.Connection:
         DB_PATH.parent.mkdir(parents=True, exist_ok=True)
         conn = sqlite3.connect(str(DB_PATH), timeout=30.0)
         conn.row_factory = sqlite3.Row
@@ -63,6 +66,42 @@ class DatabaseConnection:
             except Exception:
                 pass
         return conn
+
+    @classmethod
+    def ensure_database_ready(cls):
+        """Ensures database schema and calibrated seed data are present (vital for serverless cold-starts)."""
+        if cls._is_ready or cls._is_initializing:
+            return
+        cls._is_initializing = True
+        try:
+            with cls._create_raw_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='orders';")
+                table_exists = cursor.fetchone()
+
+                needs_seed = False
+                if not table_exists:
+                    cls.init_db()
+                    needs_seed = True
+                else:
+                    cursor.execute("SELECT COUNT(*) FROM orders;")
+                    cnt = cursor.fetchone()[0]
+                    if cnt == 0:
+                        needs_seed = True
+
+                if needs_seed:
+                    from database.seed_data import seed_database
+                    seed_database(force=False)
+            cls._is_ready = True
+        except Exception as e:
+            print(f"[DatabaseConnection] Warning during ensure_database_ready: {e}")
+        finally:
+            cls._is_initializing = False
+
+    @classmethod
+    def get_raw_connection(cls) -> sqlite3.Connection:
+        cls.ensure_database_ready()
+        return cls._create_raw_connection()
 
     @classmethod
     def execute_query(cls, sql: str, params: tuple = ()) -> List[Dict[str, Any]]:
@@ -94,7 +133,7 @@ class DatabaseConnection:
         if schema_file.exists():
             with open(schema_file, "r", encoding="utf-8") as f:
                 schema_sql = f.read()
-            with cls.get_raw_connection() as conn:
+            with cls._create_raw_connection() as conn:
                 conn.executescript(schema_sql)
                 conn.commit()
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Header from "@/components/layout/Header";
 import { uploadDatasetFile, resetSampleDataset } from "@/services/api";
 import { Database, Upload, Trash2, CheckCircle2, AlertTriangle, FileSpreadsheet, RotateCcw } from "lucide-react";
@@ -13,6 +13,35 @@ export default function DataPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState<any>(null);
   const [cleaningStatus, setCleaningStatus] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const droppedFile = e.dataTransfer.files?.[0];
+    if (droppedFile) {
+      const ext = droppedFile.name.toLowerCase();
+      if (ext.endsWith(".csv") || ext.endsWith(".json")) {
+        setFile(droppedFile);
+      } else {
+        alert("Please upload a .csv or .json file");
+      }
+    }
+  };
 
   const handleFileUpload = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,18 +115,34 @@ export default function DataPage() {
             </div>
 
             <form onSubmit={handleFileUpload} className="space-y-4">
-              <div className="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center hover:border-blue-500 transition-colors bg-slate-50/50">
-                <FileSpreadsheet className="w-10 h-10 text-slate-400 mx-auto mb-2" />
-                <label className="cursor-pointer block text-xs font-semibold text-blue-600 hover:text-blue-700">
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer ${
+                  isDragging
+                    ? "border-blue-500 bg-blue-50/50"
+                    : "border-slate-200 hover:border-blue-500 bg-slate-50/50"
+                }`}
+              >
+                <FileSpreadsheet className="w-10 h-10 text-slate-400 mx-auto mb-2 pointer-events-none" />
+                <div className="block text-xs font-semibold text-blue-600 hover:text-blue-700 pointer-events-none">
                   <span>Choose file from your device</span>
-                  <input
-                    type="file"
-                    accept=".csv,.json"
-                    onChange={(e) => setFile(e.target.files?.[0] || null)}
-                    className="hidden"
-                  />
-                </label>
-                <span className="text-[11px] text-slate-400 block mt-1">
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv,.json"
+                  onClick={(e) => {
+                    (e.target as HTMLInputElement).value = "";
+                  }}
+                  onChange={(e) => {
+                    setFile(e.target.files?.[0] || null);
+                  }}
+                  className="hidden"
+                />
+                <span className="text-[11px] text-slate-400 block mt-1 pointer-events-none">
                   {file ? file.name : "or drag and drop .csv, .json up to 25MB"}
                 </span>
               </div>

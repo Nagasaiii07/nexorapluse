@@ -88,7 +88,18 @@ export async function uploadDatasetFile(formData: FormData) {
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err?.detail?.message || "Failed to upload dataset");
+    let msg = "Failed to upload dataset";
+    if (typeof err?.detail === "string") {
+      msg = err.detail;
+    } else if (err?.detail?.message) {
+      const errList = Array.isArray(err?.detail?.errors) && err.detail.errors.length > 0
+        ? `: ${err.detail.errors.slice(0, 3).join(", ")}`
+        : "";
+      msg = `${err.detail.message}${errList}`;
+    } else if (err?.message) {
+      msg = err.message;
+    }
+    throw new Error(msg);
   }
   return res.json();
 }

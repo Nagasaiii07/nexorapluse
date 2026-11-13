@@ -31,15 +31,51 @@ async def upload_dataset(
     contents = await file.read()
 
     records = []
-    if filename.endswith(".csv"):
+    lower_fn = filename.lower()
+    if lower_fn.endswith(".csv"):
         text = contents.decode("utf-8", errors="replace")
+        if text.startswith("\ufeff"):
+            text = text[1:]
         reader = csv.DictReader(io.StringIO(text))
         records = [row for row in reader]
-    elif filename.endswith(".json"):
-        text = contents.decode("utf-8", errors="replace")
-        records = json.loads(text)
+    elif lower_fn.endswith(".json") or lower_fn.endswith(".jsonl") or lower_fn.endswith(".ndjson"):
+        text = contents.decode("utf-8", errors="replace").strip()
+        if text.startswith("\ufeff"):
+            text = text[1:]
+        try:
+            records = json.loads(text)
+        except json.JSONDecodeError:
+            # Fallback for newline-delimited JSON (JSONL)
+            records = []
+            for line in text.splitlines():
+                line = line.strip()
+                if line:
+                    try:
+                        records.append(json.loads(line))
+                    except json.JSONDecodeError:
+                        pass
+            if not records:
+                raise HTTPException(status_code=400, detail="Invalid JSON format.")
+
+        # Unpack wrapped dictionary structures if needed
         if isinstance(records, dict):
-            records = records.get("orders") or records.get("data") or [records]
+            for candidate in ("orders", "shipments", "data", "records", "items", "rows", "results", "payload"):
+                val = records.get(candidate)
+                if isinstance(val, list):
+                    records = val
+                    break
+                elif isinstance(val, dict):
+                    for sub_cand in ("orders", "shipments", "records", "items"):
+                        if isinstance(val.get(sub_cand), list):
+                            records = val[sub_cand]
+                            break
+                    if isinstance(records, list):
+                        break
+            if isinstance(records, dict):
+                if all(isinstance(v, dict) for v in records.values()):
+                    records = list(records.values())
+                else:
+                    records = [records]
     else:
         raise HTTPException(status_code=400, detail="Only CSV and JSON file formats are supported.")
 
@@ -55,21 +91,47 @@ async def upload_dataset(
     orders_to_insert = []
     now_iso = datetime.utcnow().isoformat()
     for idx, r in enumerate(records):
-        ord_num = r.get("order_number") or r.get("Order ID") or f"NX{9000 + idx}"
+        ord_num = (
+            DataValidator.get_field_value(r, "order_number") or
+            f"NX{9000 + idx}"
+        )
         ord_id = f"ORD-{ord_num}"
-        name = r.get("customer_name") or r.get("Customer") or "Anonymous Customer"
-        plat = r.get("platform") or r.get("Platform") or "Amazon"
-        status = r.get("order_status") or r.get("Status") or "Processing"
+        name = (
+            DataValidator.get_field_value(r, "customer_name") or
+            "Anonymous Customer"
+        )
+        plat = (
+            DataValidator.get_field_value(r, "platform") or
+            "Amazon"
+        )
+        status = (
+            DataValidator.get_field_value(r, "order_status") or
+            "Processing"
+        )
+        raw_val = DataValidator.get_field_value(r, "total_amount")
         try:
-            val = float(r.get("total_amount") or r.get("Value") or 1500.0)
+            if isinstance(raw_val, (int, float)):
+                val = float(raw_val)
+            elif raw_val:
+                s = str(raw_val).replace("₹", "").replace("$", "").replace(",", "").strip()
+                val = float(s)
+            else:
+                val = 1500.0
         except (ValueError, TypeError):
             val = 1500.0
-        state = r.get("state") or r.get("State") or "Maharashtra"
-        city = r.get("city") or r.get("City") or "Mumbai"
+
+        state = (
+            DataValidator.get_field_value(r, "state") or
+            "Maharashtra"
+        )
+        city = (
+            DataValidator.get_field_value(r, "city") or
+            "Mumbai"
+        )
 
         orders_to_insert.append((
-            ord_id, ord_num, name, f"{name.lower().replace(' ', '.')}@example.com",
-            plat, status, now_iso, val, 1, state, city, "400001"
+            ord_id, str(ord_num), str(name), f"{str(name).lower().replace(' ', '.')}@example.com",
+            str(plat), str(status), now_iso, val, 1, str(state), str(city), "400001"
         ))
 
     insert_sql = """
@@ -80,8 +142,9 @@ async def upload_dataset(
     DatabaseConnection.execute_many(insert_sql, orders_to_insert)
 
     # Dispatch Event
+    event_type = EventType.JSON_DATASET_UPLOADED.value if filename.lower().endswith(".json") else EventType.CSV_DATASET_UPLOADED.value
     event = event_bus.dispatch(
-        event_type=EventType.CSV_DATASET_UPLOADED.value,
+        event_type=event_type,
         name=f"Dataset Ingested: {filename}",
         payload={"filename": filename, "records_count": len(records), "source": dataset_source},
         source="DATA_INGESTION_MODULE"
