@@ -13,7 +13,7 @@ if str(BASE_DIR) not in sys.path:
 # Application Metadata
 APP_NAME = "NEXUS Logistics Intelligence"
 APP_CODE = "NEXUS"
-APP_VERSION = "2.4.0"
+APP_VERSION = "2.4.1"
 API_PREFIX = "/api"
 
 # Database Configuration

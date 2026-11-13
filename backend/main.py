@@ -71,12 +71,14 @@ def health_check():
     """
     db_status = "connected"
     db_type = "PostgreSQL" if "postgresql" in DATABASE_URL else "SQLite"
+    db_error = None
     try:
         res = DatabaseConnection.execute_query("SELECT 1 as ping;")
         if not res or res[0]["ping"] != 1:
             db_status = "degraded"
-    except Exception:
+    except Exception as e:
         db_status = "error"
+        db_error = f"{type(e).__name__}: {str(e)}"
 
     return {
         "status": "healthy" if db_status == "connected" else "degraded",
@@ -86,7 +88,8 @@ def health_check():
         "environment": os.getenv("NODE_ENV", "production"),
         "database": {
             "status": db_status,
-            "engine": db_type
+            "engine": db_type,
+            "error": db_error
         },
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     }
